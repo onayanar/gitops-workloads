@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    #alb.ingress.kubernetes.io/scheme: internal
+    #alb.ingress.kubernetes.io/subnets: subnet-0b1bf589a3edb0f2d,subnet-03fe7bf64487044dd
+    #alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:976483154663:certificate/b1c09a26-4a6f-4b78-acc7-43006bba9819
+    #alb.ingress.kubernetes.io/security-groups: sg-03da06f2db4a3b386
+    #alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-port: '80'
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-path: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service
+            port:
+              number: 80
